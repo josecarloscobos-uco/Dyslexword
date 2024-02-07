@@ -1,0 +1,110 @@
+﻿@using Microsoft.AspNet.Identity
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Dyslexword</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+
+    <!-- Sección para inyectar CSS de las vistas parciales -->
+    @RenderSection("CssSection", required: false)
+
+    <style type="text/css">
+        :root {
+            --color-primary: #495867;
+            --color-secondary: #577399;
+            --text-primary: #BDD5EA;
+            --text-secondary: #F7F7FF;
+        }
+    </style>
+
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+            <div class="container">
+                @Html.ActionLink("Dyslexword", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Alternar navegación" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+                    @if (User.IsInRole("Tutor"))
+                    {
+                        <ul class="navbar-nav flex-grow-5">
+
+                            <li href="#" class="dropdown-item">@Html.ActionLink("Acerca de", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li href="#" class="dropdown-item">@Html.ActionLink("Calificaciones", "Index", "AlumnoTutor", new { area = "" }, new { @class = "nav-link" })</li>
+
+                        </ul>
+                    }
+                    else
+                    {
+                        <ul class="navbar-nav flex-grow-5">
+
+                            <li href="#" class="dropdown-item">@Html.ActionLink("Acerca de", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li href="#" class="dropdown-item">@Html.ActionLink("Ordenar la palabra", "Inicio", "OrderWord", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li href="#" class="dropdown-item">@Html.ActionLink("Ordenar la frase", "Inicio", "OrderPhrase", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li href="#" class="dropdown-item">@Html.ActionLink("Lectura comprensiva", "Inicio", "LongReading", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li href="#" class="dropdown-item">@Html.ActionLink("Completa la palabra", "Inicio", "Guess", new { area = "" }, new { @class = "nav-link" })</li>
+
+
+                            @if (User.IsInRole("Administrador"))
+                            {
+                                <li>@Html.ActionLink("Usuarios", "Index", "Account", new { area = "" }, new { @class = "nav-link" })</li>
+
+                            }
+
+                        </ul>
+                    }
+
+                    @if (User.IsInRole("Alumno"))
+                    {
+                        if (User.Identity.IsAuthenticated)
+                        {
+                            <a id="usuario-info"></a>
+                            <br />
+                            <a>Monedas</a>
+                        }
+                    }
+
+
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </div>
+        </nav>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Dyslexword</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        // Realiza una solicitud AJAX al controlador
+        $.ajax({
+            url: '@Url.Action("getCoin", "Account", new { Id = User.Identity.GetUserId() })',
+            type: 'GET',
+            success: function (data) {
+                // Actualiza la vista con los datos recibidos
+                $('#usuario-info').html(data);
+            },
+            error: function () {
+                console.error('Error al realizar la solicitud AJAX.');
+            }
+        });
+    });
+</script>

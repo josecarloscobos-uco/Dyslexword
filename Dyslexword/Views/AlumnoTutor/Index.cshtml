@@ -1,0 +1,81 @@
+﻿@model  Dyslexword.Common.CombinedViewModelUser
+@using Microsoft.AspNet.Identity
+
+
+@{
+    ViewBag.Title = "Calificaciones";
+}
+
+<h2>Seguimiento de los alumnos</h2>
+
+<table class="table" id="Tabla">
+    <tr>
+        <th>
+            Alumno
+        </th>
+        <th>
+            Nivel ordena la palabra
+        </th>
+        <th>
+            Nivel ordena la frase
+        </th>
+        <th>
+            Nivel lectura comprensiva
+        </th>
+        <th>
+            Nivel Completa la palabra
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var user in Model.alumnotutors)
+    {
+        <tr>
+            @if (user.UserTutorId == User.Identity.GetUserId())
+            {
+                foreach (var data in Model.applicationUsers)
+                {
+                    if (user.UserAlumnoId == data.Id)
+                    {
+                        <td>
+                            @data.UserName
+                        </td>
+                    }
+                   
+                }
+
+
+
+                foreach (var alumno in Model.level)
+                {
+                    if (alumno.UserId == user.UserAlumnoId)
+                    {
+
+                        <td>
+
+                            @(alumno.OrderWordId - 1)
+
+                        </td>
+                        <td>
+                            @(alumno.OrderPhraseId - 1)
+                        </td>
+                        <td>
+                            @(alumno.LongReadingId - 1)
+                        </td>
+                        <td>
+                            @(alumno.GuessId - 1)
+                        </td>
+                    }
+
+
+                }
+            }
+        </tr>
+    }
+
+</table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+}
+

@@ -1,0 +1,40 @@
+﻿@model Dyslexword.Models.Guess
+
+@{
+    ViewBag.Title = "Detalles";
+}
+
+<h2>Completa la palabra</h2>
+<h4>Detalles del nivel</h4>
+
+<div>
+    <hr />
+    <div class="row">
+        <div class="col-md-3">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Word)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Word)
+                </dd>
+
+            </dl>
+        </div>
+        <div class="col-md-3">
+            <div class="container-fluid">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-md-12">
+                        <img height="50" src="@Url.Action("getImage","OrderWord", new { id=Model.Id})" alt="Imagen" class="img-fluid" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-info" })
+    @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-success" })
+</p>

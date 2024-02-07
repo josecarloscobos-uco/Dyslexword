@@ -1,0 +1,63 @@
+﻿@model Dyslexword.Models.ApplicationUser
+
+@{
+    ViewBag.Title = "Borrar";
+}
+
+<h2>Usuario</h2>
+
+<h3>¿Estas seguro de borrar este usuario?</h3>
+<div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="row mb-3">
+                @Html.DisplayNameFor(model => model.Email)
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.Email)
+                </div>
+            </div>
+            <div class="row mb-3">
+                @Html.DisplayNameFor(model => model.FirstName)
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.FirstName)
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                @Html.DisplayNameFor(model => model.LastName)
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.LastName)
+                </div>
+            </div>
+            <div class="row mb-3">
+                @Html.DisplayNameFor(model => model.Birthdate)
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.Birthdate)
+                </div>
+            </div>
+            <div class="row mb-3">
+                Tipo de usuario
+                <div class="col-md-10">
+                    @Html.Action("ObtenerRole", "Account", new { userId = Model.Id }).ToString()
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Borrar" class="btn btn-danger " /> |
+            @Html.ActionLink("Volver", "Index", "Account", null, new { @class = "btn btn-primary" })
+        </div>
+    }
+</div>

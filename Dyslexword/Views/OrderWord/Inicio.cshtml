@@ -1,0 +1,45 @@
+﻿@model Dyslexword.Models.OrderWord
+
+@{
+    ViewBag.Title = "Inicio";
+}
+
+
+<section class="py-5">
+    <h1 class="fw-bolder text-center">Ordenar la palabra</h1>
+    <div class="container px-5 my-5">
+        <div class="row gx-5 justify-content-xl-start">
+            <div class="col-lg-6">
+                <div class="text-center mb-5">
+                    <p class="lead fw-normal text-muted mb-0">Este juego se centra en la habilidad de organizar palabras para formar la que corresponda a la imagen mostrada. Una vez que hayas construido la palabra, puedes hacer clic en el botón de comprobar, el cual te indicará si has superado el nivel o no.</p>
+                </div>
+            </div>
+            <p class="col-lg-6 btn-lg text-center">
+                @if (User.IsInRole("Administrador") || User.IsInRole("Tutor") || User.IsInRole("Alumno"))
+                {
+                    @Html.ActionLink("Niveles", "Index", "OrderWord", null, new { @class = "btn btn-primary btn-lg" })
+                }
+                else
+                {
+                    <a class="lead fw-normal text-muted mb-0 " style="text-decoration: none;">Debe registrarse para poder jugar</a>
+                    @Html.ActionLink("Registrarse", "Register", "Account", null, new { @class = "btn btn-primary btn-lg" });
+                }
+            </p>
+        </div>
+        <div class="row gx-5 justify-content-xl-end">
+            <div class="col-lg-6">
+                <div class="text-center mb-5">
+                    <p class="lead fw-normal text-muted mb-0">Una vez que hayas completado exitosamente el nivel, serás recompensado con 100 monedas que podrás canjear de inmediato. Es importante utilizar estas monedas, ya que en el futuro podrás emplearlas para avanzar en otros niveles.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row gx-5">
+            <div class="col-lg-6">
+                <div class="text-center mb-5">
+                    <p class="lead fw-normal text-muted">Si encuentras que un nivel se vuelve demasiado difícil, tendrás la opción de canjear monedas para superarlo y avanzar al siguiente</p>
+                </div>
+            </div>
+            <div class="col-lg-6"><img class="img-fluid rounded-3 mb-5" src="https://i.ibb.co/HD8X1SM/ordenarpalabra-Inicio.png" alt="..." /></div>
+        </div>
+    </div>

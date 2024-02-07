@@ -1,0 +1,76 @@
+﻿@model Dyslexword.Models.RegisterViewModel
+@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "Registro";
+}
+
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title.</h2>
+
+    @using (Html.BeginForm("RegisterTutor", "Account", FormMethod.Post, new { role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <h4>Cree una cuenta nueva.</h4>
+        <hr />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="row mb-3">
+                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            @Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Birthdate, new { htmlAttributes = new { @class = "form-control", autocomplete = "off", @type = "date", max = "2018-12-31", min = "1970-01-01" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 col-form-label" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" name="IduserAlumno" value="@User.Identity.GetUserId()" />
+
+        <div class="row">
+            <div class="offset-md-2 col-md-10">
+                <input type="submit" value="Registrar Usuario" class="btn btn-outline-dark" />
+            </div>
+        </div>
+    }
+</main>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

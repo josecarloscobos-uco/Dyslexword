@@ -1,0 +1,56 @@
+﻿@model Dyslexword.Models.LongReading
+
+@{
+    ViewBag.Title = "Detalles";
+}
+
+<h2>Lectura Comprensiva</h2>
+<h4>Detalles del nivel</h4>
+<div>
+
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="form-group mb-2">
+                @Html.DisplayNameFor(model => model.Text)
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.Text)
+                </div>
+            </div>
+
+            <div class="form-group mb-2">
+                @Html.DisplayNameFor(model => model.Question)
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.Question)
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group mb-2">
+                @Html.DisplayNameFor(model => model.CorrectOption)
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.CorrectOption)
+                </div>
+            </div>
+
+            <div class="form-group mb-2">
+                @Html.DisplayNameFor(model => model.OptionA)
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.OptionA)
+                </div>
+            </div>
+
+            <div class="form-group mb-2">
+                @Html.DisplayNameFor(model => model.OptionB)
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.OptionB)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-info" })
+    @Html.ActionLink("Volver", "Index", null,new { @class = "btn btn-success" })
+</p>

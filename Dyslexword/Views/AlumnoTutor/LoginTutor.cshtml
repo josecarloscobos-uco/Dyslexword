@@ -1,0 +1,36 @@
+﻿@using Dyslexword.Models
+@model LoginViewModel
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Añadir tutor";
+    var errorMessage = ViewBag.ErrorMessage as string;
+}
+
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title.</h2>
+    <h4>Introcuzca el correo del tutor.</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-12 mb-3">
+            <section id="loginForm">
+                @using (Html.BeginForm("LoginTutor", "AlumnoTutor", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="text-danger">@errorMessage</div>
+                    <div class="form-group">
+                        <label for="dato">Correo Tutor:</label>
+                        <input type="text" id="dato" name="correo" class="form-control" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                    <input type="hidden" name="IduserAlumno" value="@User.Identity.GetUserId()" />
+                }
+
+            </section>
+        </div>
+
+    </div>
+</main>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

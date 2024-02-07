@@ -1,0 +1,31 @@
+﻿@model Dyslexword.Models.OrderPhrase
+
+@{
+    ViewBag.Title = "Borrar";
+}
+
+<h2>Ordena la frase</h2>
+
+<h3>¿Estas seguro de borrar este nivel?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Phrase)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phrase)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+<div class="form-actions no-color">
+    <input type="submit" value="Borrar" class="btn btn-danger " /> |
+    @Html.ActionLink("Volver", "Index", "OrderPhrase", null, new { @class = "btn btn-primary" })
+</div>
+    }
+</div>

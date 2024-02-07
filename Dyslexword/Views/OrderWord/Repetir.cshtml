@@ -1,0 +1,145 @@
+﻿@model Dyslexword.Models.OrderWord
+@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "Jugar";
+}
+
+
+<div class="container-fluid h-100">
+    <div class="row h-50 justify-content-center align-items-center">
+        <div class="col-md-6">
+            <img height="50" src="@Url.Action("getImage","OrderWord", new { id=Model.Id})" alt="Imagen" class="img-fluid" />
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="row justify-content-center" id="sortable-cards">
+    </div>
+</div>
+
+
+
+<div class="text-center d-md-block">
+    <a class="btn btn-danger btn-sm" href="@Url.Action("Index", "OrderWord")">
+        <i class="bi bi-menu-app"></i> Volver
+    </a>
+    <a class="btn btn-success btn-sm" onclick="comprobarAcierto()">
+        <i class="bi bi-plus-circle" aria-hidden="true"></i> Comprobar
+    </a>
+</div>
+
+
+<div id="ModalAcierto" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Has acertado</h5>
+            </div>
+            <div class="modal-body">
+                <p>Has vuelto a pasar el nivel el nivel.</p>
+            </div>
+            <div class="modal-footer">
+                @Html.ActionLink("Niveles", "Index", "OrderWord", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ModalFallo" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Fallo</h5>
+            </div>
+            <div class="modal-body">
+                <p>Vuelve a intentarlo.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        let shuffledWord = '';
+        let currentIndex = 0;
+        let timerId;
+
+        $(document).ready(function () {
+            $("#sortable-cards").sortable({
+                axis: "x", // Horizontal axis
+                containment: "parent",
+                tolerance: "pointer",
+                cursor: "move"
+            });
+            $("#sortable-cards").disableSelection();
+        });
+
+
+        $(document).ready(function () {
+            var inputWord = '@Model.Word';
+            shuffledWord = shuffleWord(inputWord);
+        currentIndex = 0;
+        clearInterval(timerId);
+        timerId = setInterval(showNextLetter, 300); // Cambia la velocidad aquí (en milisegundos)
+    });
+
+    function showNextLetter() {
+        if (currentIndex < shuffledWord.length) {
+            const currentLetter = shuffledWord[currentIndex];
+
+
+            const card = `<div class="col-md-1 mb-3" data-value="${currentLetter}">
+                                <div class="card">
+                                <div id="hola" class="card-body hola">
+                                ${currentLetter}
+                                </div>
+                                </div>
+                               </div>`
+            const carcontainer = document.getElementById("sortable-cards");
+            carcontainer.innerHTML += card;
+
+
+            currentIndex++;
+        } else {
+            clearInterval(timerId);
+        }
+    }
+
+    function shuffleWord(word) {
+        const array = word.split("");
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array.join("");
+    }
+
+        function comprobarAcierto() {
+            let palabra = '';
+            var divs = document.getElementsByClassName("hola");
+            for (var i = 0; i < divs.length; i++) {
+                var div = divs[i];
+                palabra += div.innerText;
+            }
+
+            if (palabra == '@Model.Word') {
+                $("#ModalAcierto").modal("show");
+            } else {
+                $("#ModalFallo").modal("show");
+            }
+
+        }
+
+    </script>
+}

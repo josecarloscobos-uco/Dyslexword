@@ -1,0 +1,92 @@
+﻿@model Dyslexword.Models.Guess
+@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "Jugar";
+}
+
+<h1>Completa la palabra</h1>
+<div class="text-center">
+    <h3 id="palabra"></h3>
+</div>
+
+<div class="container-fluid h-100">
+    <div class="row h-50 justify-content-center align-items-center">
+        <div class="col-md-6">
+            <img height="50" src="@Url.Action("getImage","Guess", new { id=Model.Id})" alt="Imagen" class="img-fluid" />
+        </div>
+    </div>
+</div>
+
+<div class="text-center mb-2">
+    <p>¿Escribe la palabra completa que deseas adivinar?</p>
+    <input type="text" id="adivinanza" placeholder="Escribe tu respuesta">
+</div>
+
+<div class="text-center d-md-block">
+    <a class="btn btn-danger btn-sm" href="@Url.Action("Index", "Guess")">
+        <i class="bi bi-menu-app"></i> Volver
+    </a>
+    <a class="btn btn-success btn-sm" onclick="verificarAdivinanza()">
+        <i class="bi bi-plus-circle" aria-hidden="true"></i> Comprobar
+    </a>
+</div>
+
+
+<div id="ModalAcierto" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Has acertado</h5>
+            </div>
+            <div class="modal-body">
+                <p>Has vuelto a pasar el nivel el nivel.</p>
+            </div>
+            <div class="modal-footer">
+                @Html.ActionLink("Niveles", "Index", "Guess", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ModalFallo" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Fallo</h5>
+            </div>
+            <div class="modal-body">
+                <p>Vuelve a intentarlo.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+        // Palabras
+        var palabraSeleccionada = '@Model.Word';
+
+        // Eliminar una letra aleatoria de la palabra
+        var indiceLetraAEliminar = Math.floor(Math.random() * palabraSeleccionada.length);
+        var letraAEliminar = palabraSeleccionada.charAt(indiceLetraAEliminar);
+        var remplazado = palabraSeleccionada.replace(letraAEliminar, '_')
+
+        // Mostrar la palabra con una letra faltante
+        document.getElementById("palabra").textContent = remplazado;
+
+        // Función para verificar la adivinanza
+        function verificarAdivinanza() {
+            var respuesta = document.getElementById("adivinanza").value.toUpperCase();
+            if (respuesta === palabraSeleccionada) {
+                $("#ModalAcierto").modal("show");
+            } else {
+                $("#ModalFallo").modal("show");
+            }
+        }
+        
+</script>

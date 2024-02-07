@@ -1,0 +1,27 @@
+﻿@model Dyslexword.Models.OrderPhrase
+
+@{
+    ViewBag.Title = "Detalles";
+}
+
+<h2>Ordena la palabra</h2>
+<h4>Detalles del nivel</h4>
+
+<div>
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Phrase)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phrase)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-info" })
+    @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-success" })
+</p>

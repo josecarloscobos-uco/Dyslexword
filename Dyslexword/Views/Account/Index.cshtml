@@ -1,0 +1,67 @@
+﻿@using Microsoft.AspNet.Identity
+@model  List<Dyslexword.Models.ApplicationUser>
+
+@{
+    ViewBag.Title = "Usuario";
+}
+
+<h2>Usuarios</h2>
+<h4>Usuarios del sistema</h4>
+<hr />
+
+<p>
+    @Html.ActionLink("Añadir usuarios", "RegisterAdmin", "Account", null, new { @class = "btn btn-primary" })
+</p>
+
+@using (Html.BeginForm("Index", "Account", FormMethod.Get))
+{
+    <div class="form-group">
+        <label for="nombre">Buscador por correo electrónico:</label>
+        <input type="text" name="nombre" class="form-control" placeholder="Correo electrónico...">
+    </div>
+    <button type="submit" class="btn btn-primary">Buscar</button>
+}
+
+<div style="padding-bottom: 20px;">
+</div>
+
+<div class="row">
+    @foreach (var user in Model)
+    {
+
+        <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+            <div class="card h-100">
+                <div class="card-body text-center">
+
+                    <p>
+                        @{
+                            var resultado = Html.Action("ObtenerRole", "Account", new { userId = user.Id }).ToString();
+
+                        }
+                        Correo: @user.Email <br />
+                        Nombre: @user.FirstName<br />
+                        Apellidos: @user.LastName<br />
+                        Fecha de nacimiento: @user.Birthdate.ToString("dd/MM/yyyy")<br />
+                        Tipo usuario: @resultado<br />
+
+                        @if (resultado == "Alumno")
+                        {
+                            <a>Monedas: @((int)user.Coins)<br /></a>
+                        }
+
+
+
+                    </p>
+
+                </div>
+                <div class="card-footer text-center">
+                    <div class="d-grid gap-2 d-md-block">
+                        <a class="btn btn-primary btn-sm" href="@Url.Action("Delete", "Account", new { id = user.Id })"><i class="bi bi-info-square" aria-hidden="true"></i> Borrar Usuario </a>
+                        <a class="btn btn-primary btn-sm" href="@Url.Action("Details", "Account", new { id = user.Id })"><i class="bi bi-info-square" aria-hidden="true"></i> Datos del usuario </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,126 @@
+﻿@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Inicio";
+    Layout = Dyslexword.Common.Literals.LayoutPublic;
+}
+
+<main>
+    <!-- Header-->
+    <header class="bg-dark py-5">
+        <div class="container px-5">
+            <div class="row gx-5 align-items-center justify-content-center">
+                <div class="col-lg-8 col-xl-7 col-xxl-6">
+                    <div class="my-5 text-center text-xl-start">
+                        <h1 class="display-5 fw-bolder text-white mb-2">Dyslexword</h1>
+                        <p class="lead fw-normal text-white-50 mb-4">Dyslexword es una aplicación web diseñada para brindar apoyo a los niños que enfrentan dificultades con la 
+                        dislexia. A través de juegos divertidos y entretenidos, nuestra plataforma busca ayudar a los más jóvenes a superar este trastorno.</p>
+                    </div>
+                </div>
+                <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center"><img class="img-fluid rounded-3 my-5" src="https://img.freepik.com/foto-gratis/vista-superior-ninos-no-binarios-jugando-juego-colorido_23-2148779611.jpg" alt="..." /></div>
+            </div>
+        </div>
+    </header>
+    <!-- Features section-->
+    <section class="py-5" id="features">
+        <div class="container px-5 my-5">
+            <div class="row gx-5">
+                <div class="col-lg-4 mb-5 mb-lg-0"><h2 class="fw-bolder mb-0">Estos son los juegos que encontrarás.</h2></div>
+                <div class="col-lg-8">
+                    <div class="row gx-5 row-cols-1 row-cols-md-2">
+                        <div class="col mb-5 h-100">
+                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
+                            <h2 class="h5">Ordenar la palabras</h2>
+                            <p class="mb-0">En este juego, encontrarás diversos niveles que podrás superar al organizar las letras y formar palabras con ellas.</p>
+                            <p>
+                                @Html.ActionLink("Inicio", "Inicio", "OrderWord", null, new { @class = "btn btn-primary" })
+                            </p>
+                        </div>
+                        <div class="col mb-5 h-100">
+                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-building"></i></div>
+                            <h2 class="h5">Ordena la frase</h2>
+                            <p class="mb-0">Este juego ofrece varios niveles que puedes completar al organizar todas las palabras y formar una frase con ellas.</p>
+                            <p>
+                                @Html.ActionLink("Inicio", "Inicio", "OrderPhrase", null, new { @class = "btn btn-primary" })
+                            </p>
+                        </div>
+                        <div class="col mb-5 mb-md-0 h-100">
+                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-toggles2"></i></div>
+                            <h2 class="h5">Lectura comprensiva</h2>
+                            <p class="mb-0">
+                                Estos juegos consisten en la lectura de breves textos, seguida de la selección de la pregunta correcta entre las opciones
+                                proporcionadas.
+                            </p>
+                            <p>
+                                @Html.ActionLink("Inicio", "Inicio", "LongReading", null, new { @class = "btn btn-primary" })
+                            </p>
+                        </div>
+                        <div class="col h-100">
+                            <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-toggles2"></i></div>
+                            <h2 class="h5">Completa la palabra</h2>
+                            <p class="mb-0">En este juego, deberás adivinar la palabra que se intenta formar al añadir una consonante o una vocal.</p>
+                            <p>
+                                @Html.ActionLink("Inicio", "Inicio", "Guess", null, new { @class = "btn btn-primary" })
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row gx-5">
+            <div class="col-lg-6">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bolder">Tutores</h2>
+                    <p class="lead fw-normal text-muted">Para los tutores de los alumnos, es importante tener en cuenta que a través de las cuentas de los alumnos, 
+                    podrán registrar sus propias cuentas de usuario. Estas cuentas les proporcionarán acceso a información detallada sobre los niveles y juegos que
+                    sus estudiantes están llevando a cabo. Esto facilitará un seguimiento más efectivo y completo de su progreso educativo.</p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bolder">Monedas</h2>
+                    <p class="lead fw-normal text-muted">
+                        Las monedas desempeñan un papel fundamental en nuestra aplicación web. Puedes obtener monedas de dos maneras diferentes. La forma más sencilla es 
+                        iniciar sesión en la aplicación todos los días, lo que te recompensará con 50 monedas diarias. Otra manera de adquirirlas es superar los niveles de
+                        nuestros diversos juegos, lo que te permitirá ganar 100 monedas por nivel completado
+                    </p>
+                    <p class="lead fw-normal text-muted">
+                        Estas monedas tienen un propósito importante, ya que te permitirán avanzar en los niveles. Si te encuentras con un nivel particularmente desafiante, 
+                        necesitarás acumular 400 monedas para poder superarlo.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Verificar la variable de sesión y abrir la modal si es necesario -->
+    @if (Session["MiVariable"] != null && (bool)Session["MiVariable"] == true)
+    {
+        Session.Remove("MiVariable");
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                // Abre la modal aquí
+                $("#miModal").modal("show");
+            });
+        </script>
+    }
+
+    <!-- Modal -->
+    <div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Enhorabuena</h1>
+                </div>
+                <div class="modal-body">
+                    Has ganado 100 monedas.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>

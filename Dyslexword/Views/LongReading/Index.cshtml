@@ -1,0 +1,119 @@
+﻿@model  Dyslexword.Common.CombinedViewModelLongReading
+@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "Niveles";
+}
+
+<h2>Lectura Comprensiva</h2>
+<h4>Niveles</h4>
+<hr />
+
+@if (User.IsInRole("Administrador"))
+{
+    <p>
+        @Html.ActionLink("Crear Nivel", "Create", "LongReading", null, new { @class = "btn btn-primary" })
+    </p>
+
+
+    using (Html.BeginForm("Index", "LongReading", FormMethod.Get))
+    {
+        <div class="form-group">
+            <label for="nombre">Buscador por texto:</label>
+            <input type="text" name="texto" class="form-control" placeholder="Texto...">
+        </div>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    }
+}
+
+<div style="padding-bottom: 20px;">
+</div>
+
+<div class="row">
+    @foreach (var itemReading in Model.longReading)
+    {
+        <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+            <div class="card h-100">
+                <div class="card-body text-center">
+
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        <p>
+                            Nivel: @itemReading.Id <br />
+                            Texto: @itemReading.Text
+                        </p>
+                    }
+                    else
+                    {
+                        <p>
+                            Nivel: @itemReading.Id
+                        </p>
+
+                    }
+                </div>
+                <div class="card-footer text-center">
+                    <div class="d-grid gap-2 d-md-block">
+
+                        @if (User.IsInRole("Administrador"))
+                        {
+                            <a class="btn btn-primary btn-sm" href="@Url.Action("Delete", "LongReading", new { id = itemReading.Id })"><i class="bi bi-info-square" aria-hidden="true"></i> Borrar Nivel </a>
+                            <a class="btn btn-primary btn-sm" href="@Url.Action("Details", "LongReading", new { id = itemReading.Id })"><i class="bi bi-info-square" aria-hidden="true"></i> Datos del Nivel </a>
+                            <a class="btn btn-primary btn-sm" href="@Url.Action("Edit", "LongReading", new { id = itemReading.Id })"><i class="bi bi-info-square" aria-hidden="true"></i> Editar Nivel </a>
+
+                        }
+
+                        @foreach (var itemLevel in Model.level)
+                        {
+                            if (User.IsInRole("Tutor"))
+                            {
+                                var idAlumno = Html.Action("ComprobarAlumno", "Manage", new { userId = User.Identity.GetUserId() }).ToString();
+
+                                if (idAlumno == itemLevel.UserId)
+                                {
+                                    if (itemLevel.LongReadingId == itemReading.Id)
+                                    {
+                                        <div class="row">
+                                            <a>Siguiente nivel a realizar</a>
+                                        </div>
+                                    }
+                                    else if (itemLevel.LongReadingId < itemReading.Id)
+                                    {
+                                        <a>Nivel Bloqueado</a>
+                                    }
+                                    else
+                                    {
+                                        <div class="row">
+                                            <a>Completado</a>
+                                        </div>
+                                    }
+                                }
+                            }
+
+                            if (User.Identity.GetUserId() == itemLevel.UserId)
+                            {
+                                if (itemLevel.LongReadingId == itemReading.Id)
+                                {
+                                    <a class="btn btn-primary btn-sm" href="@Url.Action("Jugar", "LongReading", new { id = itemReading.Id })"><i class="bi bi-info-square" aria-hidden="true"></i> Jugar este nivel </a>
+                                }
+                                else if (itemLevel.LongReadingId < itemReading.Id)
+                                {
+                                    <a>Nivel Bloqueado</a>
+                                }
+                                else
+                                {
+                                    <div class="row">
+                                        <a>Completado</a>
+                                    </div>
+
+                                    <a class="btn btn-primary btn-sm" href="@Url.Action("Repetir", "LongReading", new { id = itemReading.Id })"><i class="bi bi-info-square" aria-hidden="true"></i> Repetir Nivel </a>
+
+                                }
+                            }
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

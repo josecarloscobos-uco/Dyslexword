@@ -1,0 +1,65 @@
+﻿@model Dyslexword.Models.OrderWord
+
+@{
+    ViewBag.Title = "Crear Nivel";
+}
+
+
+<h2>Ordena la palabra</h2>
+
+<form enctype="multipart/form-data">
+</form>
+
+@using (Html.BeginForm("Create", "OrderWord", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Crea un nuevo nivel de este juego</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Word, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Word, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Word, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="mb-3">
+                    <div class="mb-3">
+                        <div class="file">
+                            @Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="file-loading">
+                                <input type="file" name="ImagenFile" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-lg-2">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Crear" class="btn btn-primary" />
+                </div>
+            </div>
+            <div class="col-lg-2">
+                @Html.ActionLink("Ver niveles", "Index", "OrderWord", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,204 @@
+﻿@model Dyslexword.Models.LongReading
+@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "Jugar";
+}
+
+<h1>Lectura comprensiva</h1>
+<div class="row">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <div class="mb-3">
+                @Html.DisplayFor(model => model.Text)
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                @Html.DisplayFor(model => model.Question)
+            </div>
+        </div>
+    </div>
+
+    <ol id="radioList">
+        <li>
+            <input class="form-check-input" type="radio" name="opcion" id="opcion1" value="opcion1">
+            <label class="form-check-label" for="opcion1">@Model.OptionA</label>
+        </li>
+        <li>
+            <input class="form-check-input" type="radio" name="opcion" id="opcion2" value="opcion2">
+            <label class="form-check-label" for="opcion2">@Model.OptionB</label>
+        </li>
+        <li>
+            <input class="form-check-input" type="radio" name="opcion" id="opcion3" value="Correcto">
+            <label class="form-check-label" for="opcion3">@Model.CorrectOption</label>
+        </li>
+    </ol>
+
+
+</div>
+
+
+
+
+<div class="text-center d-md-block">
+    <a class="btn btn-danger btn-sm" href="@Url.Action("Index", "LongReading")">
+        <i class="bi bi-menu-app"></i> Volver
+    </a>
+    <a class="btn btn-info btn-sm" onclick="comprobarMonedas()">
+        <i class="bi bi-plus-circle" aria-hidden="true"></i> Utilizar Monedas
+    </a>
+    <a class="btn btn-success btn-sm" onclick="obtenerRadioPulsado()">
+        <i class="bi bi-plus-circle" aria-hidden="true"></i> Comprobar
+    </a>
+</div>
+
+
+<div id="ModalAcierto" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Has acertado</h5>
+            </div>
+            <div class="modal-body">
+                <p>Pasas al siguiente nivel.</p>
+                <p>Has ganado 100 monedas.</p>
+            </div>
+            <div class="modal-footer">
+                <form action="@Url.Action("Acertado", "LongReading")" method="post">
+
+                    <input type="hidden" name="IdGame" value='@Model.Id' />
+                    <input type="hidden" name="UserId" value="@User.Identity.GetUserId()" />
+
+                    <button type="submit" class="btn btn-primary">Siguiente Nivel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ModalFallo" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Fallo</h5>
+            </div>
+            <div class="modal-body">
+                <p>Vuelve a intentarlo.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ModalModedas" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Monedas suficientes</h5>
+            </div>
+            <div class="modal-body">
+                <p>Pasaras al siguiente nivel gastando 400 monedas, ¿Estas seguro?</p>
+            </div>
+            <div class="modal-footer">
+                <form action="@Url.Action("PasarNivel", "LongReading")" method="post">
+
+                    <input type="hidden" name="IdGame" value='@Model.Id' />
+                    <input type="hidden" name="UserId" value="@User.Identity.GetUserId()" />
+
+                    <button type="submit" class="btn btn-primary">Siguiente Nivel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ModalSinMonedas" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Fallo</h5>
+            </div>
+            <div class="modal-body">
+                <p>No tienes suficientes monedas.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            const radioList = document.getElementById("radioList");
+            const radioItems = Array.from(radioList.getElementsByTagName("li"));
+
+            // Barajar el orden de los elementos de lista (radio buttons + etiquetas)
+            const shuffledItems = shuffleArray(radioItems);
+
+            // Reemplazar el contenido de la lista ordenada con los elementos barajados
+            radioList.innerHTML = '';
+            shuffledItems.forEach(item => {
+                radioList.appendChild(item);
+            });
+        });
+
+        // Función para barajar un array usando el algoritmo de Fisher-Yates
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function obtenerRadioPulsado() {
+            const radioButtons = document.getElementsByName("opcion");
+
+            for (let i = 0; i < radioButtons.length; i++) {
+                if (radioButtons[i].checked) {
+                    const valorSeleccionado = radioButtons[i].value;
+                    if (valorSeleccionado == "Correcto") {
+                        $("#ModalAcierto").modal("show");
+                    } else {
+                        $("#ModalFallo").modal("show");
+                    }
+                }
+            }
+        }
+
+        function comprobarMonedas() {
+            $.ajax({
+                url: '@Url.Action("getCoin", "Account", new { Id = User.Identity.GetUserId() })',
+                type: 'GET',
+                success: function (data) {
+                    // Actualiza la vista con los datos recibidos
+                    $('#usuario-info').html(data);
+                    if (data >= 400) {
+                        $("#ModalModedas").modal("show");
+                    } else {
+                        $("#ModalSinMonedas").modal("show");
+                    }
+                },
+                error: function () {
+                    console.error('Error al realizar la solicitud AJAX.');
+                }
+            });
+        }
+
+
+    </script>
+}

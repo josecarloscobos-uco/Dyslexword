@@ -1,0 +1,69 @@
+﻿@model Dyslexword.Models.ApplicationUser
+
+@{
+    ViewBag.Title = "Detalles";
+}
+
+<h2>Usuario</h2>
+<h4>Detalles del usuario</h4>
+<div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="row mb-3">
+                @Html.DisplayNameFor(model => model.Email)
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.Email)
+                </div>
+            </div>
+            <div class="row mb-3">
+                @Html.DisplayNameFor(model => model.FirstName)
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.FirstName)
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                @Html.DisplayNameFor(model => model.LastName)
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.LastName)
+                </div>
+            </div>
+            <div class="row mb-3">
+                @Html.DisplayNameFor(model => model.Birthdate)
+                <div class="col-md-10">
+                    @Html.DisplayFor(model => model.Birthdate)
+                </div>
+            </div>
+            <div class="row mb-3">
+                Tipo de usuario
+                <div class="col-md-10">
+                    @Html.Action("ObtenerRole", "Account", new { userId = Model.Id }).ToString()
+                </div>
+            </div>
+
+            @{
+                var resultado = Html.Action("ObtenerRole", "Account", new { userId = Model.Id }).ToString();
+            }
+
+            @if (resultado == "Alumno")
+            {
+                <div class="row mb-3">
+                    @Html.DisplayNameFor(model => model.Coins)
+                    <div class="col-md-10">
+                        @Html.DisplayFor(model => model.Coins)
+                    </div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-info" })
+    @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-success" })
+</p>

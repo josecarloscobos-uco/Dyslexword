@@ -1,0 +1,69 @@
+﻿@model Dyslexword.Models.IndexViewModel
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Configuracion";
+}
+
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title</h2>
+
+    <p class="text-success">@ViewBag.StatusMessage</p>
+    <div>
+        <h4>Cambiar la configuración de la cuenta</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt class="mb-3">Contraseña:</dt>
+            <dd>
+
+                @if (Model.HasPassword)
+                {
+                    @Html.ActionLink("Cambiar la contraseña", "ChangePassword", null, new { @class = "btn btn-primary" })
+                }
+                else
+                {
+                    @Html.ActionLink("Crear", "SetPassword", new { @class = "btn btn-primary" })
+                }
+
+            </dd>
+          <hr />
+            <dt class="mb-3">Editar Perfil:</dt>
+            <dd>
+
+                @Html.ActionLink("Editar Perfil", "EditPerfil", "Account", new { id = User.Identity.GetUserId() }, new { @class = "btn btn-primary" })
+
+            </dd>
+        </dl>
+        @if (User.IsInRole("Alumno"))
+        {
+            <hr />
+            <dl class="dl-horizontal">
+                <dt class="mb-3">Detalles tutor
+                <dd>
+
+                    @{
+                        var resultado = Html.Action("ComprobarTutor", "Manage", new { userId = User.Identity.GetUserId() }).ToString();
+                    }
+
+                    @if (resultado == "")
+                    {
+                        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                            <div class="btn-group" role="group" aria-label="First group">
+                                @Html.ActionLink("Registrar tutor", "RegisterTutor", "Account", null, new { @class = "btn btn-primary" })
+                            </div>
+                            <div class="btn-group mx-2" role="group" aria-label="Second group">
+                                @Html.ActionLink("Añadir tutor existente", "LoginTutor", "AlumnoTutor", null, new { @class = "btn btn-primary" })
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+
+                        @Html.ActionLink("Datos tutor", "detailsTutor", "Account", new { id = resultado }, new { @class = "btn btn-primary" })
+                    }
+
+
+                </dd>
+            </dl>
+        }
+    </div>
+</main>

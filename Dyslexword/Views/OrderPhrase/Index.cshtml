@@ -1,0 +1,123 @@
+﻿@model  Dyslexword.Common.CombinedViewModelPhrase
+@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "Niveles";
+}
+
+<h2>Ordena la frase</h2>
+<h4>Niveles</h4>
+<hr />
+
+@if (User.IsInRole("Administrador"))
+{
+    <p>
+        @Html.ActionLink("Crear Nivel", "Create", "OrderPhrase", null, new { @class = "btn btn-primary" })
+    </p>
+
+
+    using (Html.BeginForm("Index", "OrderPhrase", FormMethod.Get))
+    {
+        <div class="form-group">
+            <label for="nombre">Buscador por frase:</label>
+            <input type="text" name="frase" class="form-control" placeholder="Frase...">
+        </div>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    }
+}
+
+<div style="padding-bottom: 20px;">
+</div>
+
+
+<div class="row">
+    @foreach (var itemPhrase in Model.orderPhrase)
+    {
+        <div class="col-md-6 col-lg-4 col-xl-3 mb-3">
+            <div class="card h-100">
+                <div class="card-body text-center">
+
+                    @if (User.IsInRole("Administrador"))
+                    {
+                        <p>
+                            Nivel: @itemPhrase.Id<br />
+                            Frase: @itemPhrase.Phrase
+                        </p>
+                    }
+                    else
+                    {
+                        <p>
+                            Nivel: @itemPhrase.Id
+                        </p>
+
+                    }
+                </div>
+                <div class="card-footer text-center">
+                    <div class="d-grid gap-2 d-md-block">
+
+                        @if (User.IsInRole("Administrador"))
+                        {
+
+                            <a class="btn btn-primary btn-sm" href="@Url.Action("Delete", "OrderPhrase", new { id = itemPhrase.Id })"><i class="bi bi-info-square" aria-hidden="true"></i> Borrar Nivel </a>
+                            <a class="btn btn-primary btn-sm" href="@Url.Action("Details", "OrderPhrase", new { id = itemPhrase.Id })"><i class="bi bi-info-square" aria-hidden="true"></i> Datos del Nivel </a>
+                            <a class="btn btn-primary btn-sm" href="@Url.Action("Edit", "OrderPhrase", new { id = itemPhrase.Id })"><i class="bi bi-info-square" aria-hidden="true"></i> Editar Nivel </a>
+                        }
+
+
+                        @foreach (var itemLevel in Model.level)
+                        {
+
+                            if (User.IsInRole("Tutor"))
+                            {
+                                var idAlumno = Html.Action("ComprobarAlumno", "Manage", new { userId = User.Identity.GetUserId() }).ToString();
+
+                                if (idAlumno == itemLevel.UserId)
+                                {
+                                    if (itemLevel.OrderPhraseId == itemPhrase.Id)
+                                    {
+                                        <div class="row">
+                                            <a>Siguiente nivel a realizar</a>
+                                        </div>
+                                    }
+                                    else if (itemLevel.OrderPhraseId < itemPhrase.Id)
+                                    {
+                                        <a>Nivel Bloqueado</a>
+                                    }
+                                    else
+                                    {
+                                        <div class="row">
+                                            <a>Completado</a>
+                                        </div>
+                                    }
+                                }
+                            }
+
+
+                            if (User.Identity.GetUserId() == itemLevel.UserId)
+                            {
+                                if (itemLevel.OrderPhraseId == itemPhrase.Id)
+                                {
+                                    <a class="btn btn-primary btn-sm" href="@Url.Action("Jugar", "OrderPhrase", new { id = itemPhrase.Id })"><i class="bi bi-info-square" aria-hidden="true"></i> Jugar este nivel </a>
+                                }
+                                else if (itemLevel.OrderPhraseId < itemPhrase.Id)
+                                {
+                                    <a>Nivel Bloqueado</a>
+                                }
+                                else
+                                {
+                                    <div class="row">
+                                        <a>Completado</a>
+                                    </div>
+
+                                    <a class="btn btn-primary btn-sm" href="@Url.Action("Repetir", "OrderPhrase", new { id = itemPhrase.Id })"><i class="bi bi-info-square" aria-hidden="true"></i> Repetir Nivel </a>
+
+                                }
+                            }
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
